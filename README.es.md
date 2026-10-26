@@ -1,23 +1,38 @@
-# Python Hello
+# Agente de inventario para suministros de café
 
-El boilerplate más básico para comenzar un proyecto en Python en 4Geeks. Inicia tu primer proyecto en Python desde cero.
+Una API local de inventario respaldada por CSV y un asistente conversacional para una tienda de suministros de café. El agente puede consultar existencias, registrar productos y entregas, anotar ventas y avisar cuando el stock es bajo.
 
-## ¿Qué hacer a continuación?
+## Configuración
 
-Abre el archivo `main.py` y comienza a escribir tu código.
-
-Ejecuta tu código escribiendo el siguiente comando en tu terminal:
+Usa Python 3.10 o posterior. Instala las dependencias y crea el archivo de entorno local:
 
 ```bash
-$ python main.py
+python -m pip install -r requirements.txt
+cp .env.example .env
 ```
 
-Puedes crear e incluir tantos archivos de Python (también conocidos como módulos) como desees utilizando las declaraciones de importación.
+Configura `GROQ_API_KEY` en `.env`. `GROQ_MODEL` es opcional y, por defecto, usa `llama-3.3-70b-versatile`. `INVENTORY_API_URL` es opcional y, por defecto, usa `http://127.0.0.1:8000`. No compartas `.env`; Git lo ignora.
 
-## Requisitos
+## Ejecución
 
-Asegúrate de tener Python instalado en tu computadora. Te recomendamos encarecidamente [instalar Python a través de Pyenv](https://4geeks.com/es/how-to/que-es-pyenv-y-como-instalar-pyenv) para evitar conflictos de versiones en el futuro.
+Inicia la API en una terminal:
 
-### Contribuidores
+```bash
+uvicorn api.app:app --reload
+```
 
-Esta plantilla fue creada como parte de los [Recursos de Python de 4Geeks](https://4geeks.com/es/technology/python) para el aprendizaje en [4Geeks.com](https://4geeks.com) por [Alejandro Sanchez](https://twitter.com/alesanchezr) y [muchos otros contribuyentes](https://github.com/4GeeksAcademy/python-hello/graphs/contributors).
+Inicia el agente conversacional en otra terminal:
+
+```bash
+python agent.py
+```
+
+Escribe `exit` o `quit` para terminar la sesión. La API lee y actualiza `products.csv`. Los eventos se agregan a `conversation_log.csv` y permanecen entre sesiones.
+
+Ejemplos:
+
+- «Acabamos de recibir 30 unidades de leche de avena».
+- «Vendimos 2 kg de café arábica».
+- «¿Qué productos tienen poco stock?».
+
+Ejecuta las pruebas con `pytest -q`.

@@ -1,23 +1,38 @@
-# Python Hello
+# Coffee Supply Inventory Agent
 
-The most basic boilerplate to start a Python project at 4Geeks is to start your very first Python project from scratch.
+A local CSV-backed inventory API and conversational assistant for a coffee supply store. The agent can check stock, register products and deliveries, record sales, and report low-stock items.
 
-## What to do next?
+## Setup
 
-Open the `main.py` file and start writing your code.
-
-Execute your code by typing the following command on your terminal:
+Use Python 3.10 or newer. Install the dependencies and create a local environment file:
 
 ```bash
-$ python main.py
+python -m pip install -r requirements.txt
+cp .env.example .env
 ```
 
-You can create and include as many python files (a.k.a. modules) as you want using the import statements.
+Set `GROQ_API_KEY` in `.env`. The optional `GROQ_MODEL` setting defaults to `llama-3.3-70b-versatile`; `INVENTORY_API_URL` defaults to `http://127.0.0.1:8000`. Keep `.env` private; it is ignored by Git.
 
-## Requirements
+## Run
 
-Make sure you have Python installed in your computer. We strongly recommend [installing Python through Pyenv ](https://4geeks.com/how-to/what-is-pyenv-and-how-to-install-pyenv) to avoid version conflicts in the future.
+Start the API in one terminal:
 
-### Contributors
+```bash
+uvicorn api.app:app --reload
+```
 
-This template was built as part of the [4Geeks Python Resources](https://4geeks.com/technology/python) for learning at [4Geeks.com](https://4geeks.com) by [Alejandro Sanchez](https://twitter.com/alesanchezr) and [many other contributors](https://github.com/4GeeksAcademy/python-hello/graphs/contributors).
+Start the conversational agent in a second terminal:
+
+```bash
+python agent.py
+```
+
+Type `exit` or `quit` to end the agent session. The API reads and writes `products.csv`. Conversation events are appended to `conversation_log.csv` and remain available across agent sessions.
+
+Example requests:
+
+- "We just received 30 units of oat milk."
+- "We sold 2 kg of arabica coffee beans."
+- "What products are running low?"
+
+Run the automated tests with `pytest -q`.
